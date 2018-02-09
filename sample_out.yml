@@ -1,0 +1,17 @@
+device:
+description: test-router
+ip: 10.1.1.1
+name: router1
+pass: user1
+port: 22.0
+type: ios
+user: user
+
+description: customer-router
+ip: 10.2.2.2
+name: router2
+pass: user2
+port: 22.0
+type: iosxr
+user: user
+
