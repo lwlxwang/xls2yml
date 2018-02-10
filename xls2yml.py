@@ -24,6 +24,10 @@ def unicode_representer(dumper, data):
 yaml.add_representer(unicode, unicode_representer)
 yaml.add_implicit_resolver(u'!unicode', re.compile('^.*$'))
 
+#
+def write_spliter(file):
+    file.write('#-------------------------------------------------\n')
+
 # Get in/out files from standard input.
 argvs = sys.argv
 argc  = len(argvs)
@@ -47,6 +51,8 @@ except:
 # Open output YAML file.
 try:
     f = open(output_file, "w")
+    f.write('# This YAML file has been made by xls2yml.py\n')
+    write_spliter(f)
 except:
     print "ERROR : Can't write output file!!"
 
@@ -64,8 +70,12 @@ for row in range(yaml_data.nrows):
     # Initializing local parameter.
     value = {}
 
+    if row < 3:
+        f.write("# " + yaml_data.cell(row,0).value + "\n")
+
     # Make label list.
-    if row == 0:
+    elif row == 3:
+        write_spliter(f)
         for col in range(yaml_data.ncols):
             label.append(yaml_data.cell(row,col).value)
 
@@ -82,7 +92,7 @@ for row in range(yaml_data.nrows):
 # Write device information in YAML data format.
 out = {}
 out[yaml_type] = device
-f.write('#\n#  This YAML file has been made by xls2yml.py\n#\n\n')
+
 f.write(yaml.dump(out, default_flow_style=False, allow_unicode=True))
 f.write('\n')
 

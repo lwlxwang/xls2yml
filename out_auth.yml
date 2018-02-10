@@ -1,0 +1,17 @@
+# This YAML file has been made by xls2yml.py
+#-------------------------------------------------
+# Title:
+# Update Date:
+# Comment:
+#-------------------------------------------------
+auth:
+  cisco:
+    pass: password!
+    user: renat
+  defalt:
+    pass: password!
+    user: renat
+  juniper:
+    pass: password!
+    user: renat
+
