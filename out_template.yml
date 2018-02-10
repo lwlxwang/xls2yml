@@ -1,0 +1,24 @@
+#
+#  This YAML file has been made by xls2yml.py
+#
+
+access-template:
+  cisco:
+    access: ssh
+    auth: plain-text
+    init: set terminal length 0
+    profile: default
+    prompt: !unicode '"@.*(#|>) "'
+  juniper:
+    access: telnet
+    auth: plain-text
+    init: set cli idle-timeout 0
+    profile: default
+    prompt: !unicode '"@.*(#|>) " '
+  ssh-host:
+    access: ssh
+    auth: public-key
+    init: unalias -a
+    profile: default
+    prompt: !unicode '"@.*(>|\\$)"'
+

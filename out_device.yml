@@ -1,0 +1,20 @@
+#
+#  This YAML file has been made by xls2yml.py
+#
+
+device:
+  router1:
+    description: test-router
+    ip: 10.1.1.1
+    pass: user1
+    port: 22.0
+    type: ios
+    user: user
+  router2:
+    description: customer-router
+    ip: 10.2.2.2
+    pass: user2
+    port: 22.0
+    type: iosxr
+    user: user
+
