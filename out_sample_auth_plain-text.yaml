@@ -1,10 +1,10 @@
 # This YAML file has been made by xls2yml.py
 #-------------------------------------------------
-# Title:
+# Title: B1 DC base setting
 # Update Date:
-# Comment:
+# Comment: Base setting
 #-------------------------------------------------
-auth:
+plain-text:
   cisco:
     pass: password!
     user: renat

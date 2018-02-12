@@ -1,0 +1,16 @@
+# This YAML file has been made by xls2yml.py
+#-------------------------------------------------
+# Title:
+# Update Date:
+# Comment:
+#-------------------------------------------------
+snmp-template:
+  cisco:
+    community: public
+    mib: ${RENAT_PATH}/tools/mib-Cisco.json
+    poller: apollo
+  juniper:
+    community: public
+    mib: ${RENAT_PATH}/tools/mib-Juniper.json
+    poller: apollo
+

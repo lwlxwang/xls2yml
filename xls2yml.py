@@ -32,69 +32,75 @@ def write_spliter(file):
 argvs = sys.argv
 argc  = len(argvs)
 
-if argc != 3:
-    print '  Usage: # python %s [input file] [output file]' % argvs[0]
+if argc != 2:
+    print '  Usage: # python %s [input file]' % argvs[0]
     print '        [input file]  : Excel file'
-    print '        [output file] : YAML file'
     quit()
 else:
     input_file  = argvs[1]
-    output_file = argvs[2]
 
 
-# Open input Excel file including device information
+# Open input Excel file including device information.
 try:
     book = xlrd.open_workbook(input_file)
+    file_name = re.split('[/.]', input_file)
 except:
     print "ERROR : Can't open EXCEL file as input data file!!"
 
-# Open output YAML file.
-try:
-    f = open(output_file, "w")
-    f.write('# This YAML file has been made by xls2yml.py\n')
-    write_spliter(f)
-except:
-    print "ERROR : Can't write output file!!"
 
-# Read a sheet from input excel file.
-yaml_data = book.sheet_by_index(0)
-yaml_type = book.sheet_by_index(0).name
+# Read each sheets included in input excel file.
+for sheet_name in book.sheet_names():
 
-# Initializing global parameter.
-label  = []
-device = {}
-
-
-# Start to read excel file by each row.
-for row in range(yaml_data.nrows):
-    # Initializing local parameter.
-    value = {}
-
-    if row < 3:
-        f.write("# " + yaml_data.cell(row,0).value + "\n")
-
-    # Make label list.
-    elif row == 3:
-        write_spliter(f)
-        for col in range(yaml_data.ncols):
-            label.append(yaml_data.cell(row,col).value)
-
-    # Read device data.
+    if sheet_name == "Note":
+        # Skip Note page.
+        pass
     else:
-        for col in range(yaml_data.ncols):
-            if label[col] == "name":
-                device_name = yaml_data.cell(row,col).value
+        # Open output YAML file.
+        output_file = "out_" + file_name[-2] + "_" + sheet_name + ".yaml"
+        try:
+            f = open(output_file, "w")
+            f.write('# This YAML file has been made by xls2yml.py\n')
+            write_spliter(f)
+        except:
+            print "ERROR : Can't write output file!!"
+
+        # Read a sheet from input excel file.
+        yaml_data = book.sheet_by_name(sheet_name)
+
+        # Initializing global parameter.
+        label  = []
+        device = {}
+
+        # Start to read excel file by each row.
+        for row in range(yaml_data.nrows):
+            # Initializing local parameter.
+            value = {}
+
+            if row < 3:
+                f.write("# " + yaml_data.cell(row,0).value + "\n")
+
+            # Make label list.
+            elif row == 3:
+                write_spliter(f)
+                for col in range(yaml_data.ncols):
+                    label.append(yaml_data.cell(row,col).value)
+
+            # Read device data.
             else:
-                value[label[col]] = yaml_data.cell(row,col).value
+                for col in range(yaml_data.ncols):
+                    if label[col] == "name":
+                        name = yaml_data.cell(row,col).value
+                    else:
+                        value[label[col]] = yaml_data.cell(row,col).value
 
-        device[device_name] = value
+                device[name] = value
 
-# Write device information in YAML data format.
-out = {}
-out[yaml_type] = device
+        # Write device information in YAML data format.
+        out = {}
+        out[sheet_name] = device
 
-f.write(yaml.dump(out, default_flow_style=False, allow_unicode=True))
-f.write('\n')
+        f.write(yaml.dump(out, default_flow_style=False, allow_unicode=True))
+        f.write('\n')
 
-# Closing output YAML file.
-f.close()
+        # Closing output YAML file.
+        f.close()

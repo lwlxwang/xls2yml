@@ -1,0 +1,11 @@
+# This YAML file has been made by xls2yml.py
+#-------------------------------------------------
+# Title: B1 DC base setting
+# Update Date: 1984/09/01 by yuji
+# Comment: Base setting
+#-------------------------------------------------
+public-key:
+  defalt:
+    key: $HOME/.ssh/robot_id_rsa
+    user: $USER
+
