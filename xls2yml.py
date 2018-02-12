@@ -56,7 +56,7 @@ for sheet_name in book.sheet_names():
         pass
     else:
         # Open output YAML file.
-        output_file = "out_" + file_name[-2] + "_" + sheet_name + ".yaml"
+        output_file = "./output/" + file_name[-2] + "_" + sheet_name + ".yaml"
         try:
             f = open(output_file, "w")
             f.write('# This YAML file has been made by xls2yml.py\n')
