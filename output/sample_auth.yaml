@@ -1,8 +1,6 @@
 # This YAML file has been made by xls2yml.py
 #-------------------------------------------------
-# Title: B1 DC base setting
-# Update Date:
-# Comment: Base setting
+# Title: [TEST 3-1-1] Single chassis topology
 #-------------------------------------------------
 plain-text:
   cisco:
@@ -14,4 +12,8 @@ plain-text:
   juniper:
     pass: password!
     user: renat
+public-key:
+  defalt:
+    key: $HOME/.ssh/robot_id_rsa
+    user: $USER
 

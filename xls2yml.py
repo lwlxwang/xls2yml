@@ -28,6 +28,9 @@ yaml.add_implicit_resolver(u'!unicode', re.compile('^.*$'))
 def write_spliter(file):
     file.write('#-------------------------------------------------\n')
 
+#####################################################
+#   Collect parameters as a initial step
+#####################################################
 # Get in/out files from standard input.
 argvs = sys.argv
 argc  = len(argvs)
@@ -40,6 +43,9 @@ else:
     input_file  = argvs[1]
 
 
+#####################################################
+#   Open in/out file
+#####################################################
 # Open input Excel file including device information.
 try:
     book = xlrd.open_workbook(input_file)
@@ -47,60 +53,68 @@ try:
 except:
     print "ERROR : Can't open EXCEL file as input data file!!"
 
+# Open output YAML file.
+output_file = "./output/" + file_name[-2] + ".yaml"
+try:
+    f = open(output_file, "w")
+    f.write('# This YAML file has been made by xls2yml.py\n')
+    write_spliter(f)
+except:
+    print "ERROR : Can't write output file!!"
+
+
+#####################################################
+#    Read input file and convert to YAML format
+#####################################################
+# Initializing file level parameter.
+out = {}
 
 # Read each sheets included in input excel file.
-for sheet_name in book.sheet_names():
+for sheet_name in book.sheet_names():           ##### EACH SHEET
 
+    # Read description from Note page
     if sheet_name == "Note":
-        # Skip Note page.
-        pass
-    else:
-        # Open output YAML file.
-        output_file = "./output/" + file_name[-2] + "_" + sheet_name + ".yaml"
-        try:
-            f = open(output_file, "w")
-            f.write('# This YAML file has been made by xls2yml.py\n')
-            write_spliter(f)
-        except:
-            print "ERROR : Can't write output file!!"
+        yaml_data = book.sheet_by_name(sheet_name)
+        f.write("# " + yaml_data.cell(0, 0).value + "\n")
+        write_spliter(f)
 
-        # Read a sheet from input excel file.
+    # Read a sheet from input excel file.
+    else:
         yaml_data = book.sheet_by_name(sheet_name)
 
-        # Initializing global parameter.
+        # Initializing sheet level parameter.
         label  = []
-        device = {}
+        sheet = {}
 
         # Start to read excel file by each row.
-        for row in range(yaml_data.nrows):
-            # Initializing local parameter.
-            value = {}
-
-            if row < 3:
-                f.write("# " + yaml_data.cell(row,0).value + "\n")
+        for row in range(yaml_data.nrows):      ##### EACH ROW
+            # Initializing line level parameter.
+            line = {}
 
             # Make label list.
-            elif row == 3:
-                write_spliter(f)
-                for col in range(yaml_data.ncols):
+            if row == 0 :
+                for col in range(yaml_data.ncols):      ##### EACH COLUM
                     label.append(yaml_data.cell(row,col).value)
+                    #print yaml_data.cell(row,col).value
 
-            # Read device data.
+            # Read each line data.
             else:
-                for col in range(yaml_data.ncols):
+                for col in range(yaml_data.ncols):      ##### EACH COLUM
                     if label[col] == "name":
                         name = yaml_data.cell(row,col).value
                     else:
-                        value[label[col]] = yaml_data.cell(row,col).value
+                        line[label[col]] = yaml_data.cell(row,col).value
 
-                device[name] = value
+                sheet[name] = line
 
         # Write device information in YAML data format.
-        out = {}
-        out[sheet_name] = device
+        out[sheet_name] = sheet
 
-        f.write(yaml.dump(out, default_flow_style=False, allow_unicode=True))
-        f.write('\n')
+#####################################################
+#    Write the YAML file
+#####################################################
+f.write(yaml.dump(out, default_flow_style=False, allow_unicode=True))
+f.write('\n')
 
-        # Closing output YAML file.
-        f.close()
+# Closing output YAML file.
+f.close()

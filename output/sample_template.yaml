@@ -1,8 +1,6 @@
 # This YAML file has been made by xls2yml.py
 #-------------------------------------------------
 # Title:
-# Update Date:
-# Comment:
 #-------------------------------------------------
 access-template:
   cisco:
@@ -23,4 +21,13 @@ access-template:
     init: unalias -a
     profile: default
     prompt: !unicode '"@.*(>|\\$)"'
+snmp-template:
+  cisco:
+    community: public
+    mib: ${RENAT_PATH}/tools/mib-Cisco.json
+    poller: apollo
+  juniper:
+    community: public
+    mib: ${RENAT_PATH}/tools/mib-Juniper.json
+    poller: apollo
 
